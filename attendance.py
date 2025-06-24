@@ -39,7 +39,7 @@ window.title("Face Recognizer")
 window.geometry("1280x720")
 dialog_title = "QUIT"
 dialog_text = "Are you sure want to close?"
-window.configure(background="#ffc95e")  # Dark theme
+window.configure(background="#ffffff")  # Dark theme
 
 def del_sc1():
     sc1.destroy()
@@ -50,21 +50,21 @@ def err_screen():
     sc1.geometry("400x110")
     sc1.iconbitmap(os.path.join(base_path, "AMS.ico"))
     sc1.title("Warning!!")
-    sc1.configure(background="#1c1c1c")
+    sc1.configure(background="#ffffff")
     sc1.resizable(0, 0)
     tk.Label(
         sc1,
         text="Enrollment & Name required!!!",
-        fg="yellow",
-        bg="#1c1c1c",
+        fg="#F37A9A",
+        bg="#ffffff",
         font=("Verdana", 16, "bold"),
     ).pack()
     tk.Button(
         sc1,
         text="OK",
         command=del_sc1,
-        fg="yellow",
-        bg="#333333",
+        fg="#F37A9A",
+        bg="#FFFFFF",
         width=9,
         height=1,
         activebackground="red",
@@ -77,18 +77,18 @@ def testVal(inStr, acttyp):
             return False
     return True
 
-logo = Image.open(os.path.join(base_path, "UI_Image\\0001.png"))
+logo = Image.open(os.path.join(base_path, "UI_Image\\0002.png"))
 logo = logo.resize((50, 47), Image.LANCZOS)
 logo1 = ImageTk.PhotoImage(logo)
-titl = tk.Label(window, bg="#1c1c1c", relief=RIDGE, bd=10, font=("Verdana", 30, "bold"))
+titl = tk.Label(window, bg="#ffffff", relief=RIDGE, bd=10, font=("Verdana", 30, "bold"))
 titl.pack(fill=X)
 l1 = tk.Label(window, image=logo1, bg="#47daff")
 l1.place(x=470, y=10)
 
 titl = tk.Label(
     window,
-    text="CLASS VISION",
-    bg="#552834",  # Dark maroon background
+    text="VINAYAKA MISSION",
+    bg="#F37A9A",  # Dark maroon background
     fg="#F7F4F4",  # Light text color
     font=("Verdana", 27, "bold")
 )
@@ -97,9 +97,9 @@ titl.place(x=525, y=12)
 
 a = tk.Label(
     window,
-    text="Welcome to CLASS VISION",
-    bg="#1c1c1c",
-    fg="yellow",
+    text="Welcome to VINAYAKA MISSION",
+    bg="#fffcfc",
+    fg="#F37A9A",
     bd=10,
     font=("Verdana", 35, "bold"),
 )
@@ -127,21 +127,21 @@ def TakeImageUI():
     ImageUI = Tk()
     ImageUI.title("Take Student Image..")
     ImageUI.geometry("780x480")
-    ImageUI.configure(background="#1c1c1c")
+    ImageUI.configure(background="#ffffff")
     ImageUI.resizable(0, 0)
 
-    titl = tk.Label(ImageUI, bg="#1c1c1c", relief=RIDGE, bd=10, font=("Verdana", 30, "bold"))
+    titl = tk.Label(ImageUI, bg="#ffffff", relief=RIDGE, bd=10, font=("Verdana", 30, "bold"))
     titl.pack(fill=X)
     titl = tk.Label(
-        ImageUI, text="Register Your Face", bg="#1c1c1c", fg="green", font=("Verdana", 30, "bold")
+        ImageUI, text="Register Your Face", bg="#ffffff", fg="green", font=("Verdana", 30, "bold")
     )
     titl.place(x=270, y=12)
 
     a = tk.Label(
         ImageUI,
         text="Enter the details",
-        bg="#1c1c1c",
-        fg="yellow",
+        bg="#ffffff",
+        fg="#F37A9A",
         bd=10,
         font=("Verdana", 24, "bold"),
     )
@@ -152,8 +152,8 @@ def TakeImageUI():
         text="Enrollment No",
         width=10,
         height=2,
-        bg="#1c1c1c",
-        fg="yellow",
+        bg="#ffffff",
+        fg="#F37A9A",
         bd=5,
         relief=RIDGE,
         font=("Verdana", 14),
@@ -164,8 +164,8 @@ def TakeImageUI():
         width=17,
         bd=5,
         validate="key",
-        bg="#333333",
-        fg="yellow",
+        bg="#FFFFFF",
+        fg="#F37A9A",
         relief=RIDGE,
         font=("Verdana", 18, "bold"),
     )
@@ -177,8 +177,8 @@ def TakeImageUI():
         text="Name",
         width=10,
         height=2,
-        bg="#1c1c1c",
-        fg="yellow",
+        bg="#ffffff",
+        fg="#F37A9A",
         bd=5,
         relief=RIDGE,
         font=("Verdana", 14),
@@ -188,8 +188,8 @@ def TakeImageUI():
         ImageUI,
         width=17,
         bd=5,
-        bg="#333333",
-        fg="yellow",
+        bg="#FFFFFF",
+        fg="#F37A9A",
         relief=RIDGE,
         font=("Verdana", 18, "bold"),
     )
@@ -200,8 +200,8 @@ def TakeImageUI():
         text="Notification",
         width=10,
         height=2,
-        bg="#1c1c1c",
-        fg="yellow",
+        bg="#ffffff",
+        fg="#F37A9A",
         bd=5,
         relief=RIDGE,
         font=("Verdana", 14),
@@ -214,8 +214,8 @@ def TakeImageUI():
         width=32,
         height=2,
         bd=5,
-        bg="#333333",
-        fg="yellow",
+        bg="#FFFFFF",
+        fg="#F37A9A",
         relief=RIDGE,
         font=("Verdana", 14, "bold"),
     )
@@ -242,8 +242,8 @@ def TakeImageUI():
         command=take_image,
         bd=10,
         font=("Verdana", 18, "bold"),
-        bg="#333333",
-        fg="yellow",
+        bg="#FFFFFF",
+        fg="#F37A9A",
         height=2,
         width=12,
         relief=RIDGE,
@@ -265,8 +265,8 @@ def TakeImageUI():
         command=train_image,
         bd=10,
         font=("Verdana", 18, "bold"),
-        bg="#333333",
-        fg="yellow",
+        bg="#FFFFFF",
+        fg="#F37A9A",
         height=2,
         width=12,
         relief=RIDGE,
@@ -279,8 +279,8 @@ r = tk.Button(
     command=TakeImageUI,
     bd=10,
     font=("Verdana", 16),
-    bg="black",
-    fg="yellow",
+    bg="#FFFFFF",
+    fg="#F37A9A",
     height=2,
     width=17,
 )
@@ -295,8 +295,8 @@ r = tk.Button(
     command=automatic_attedance,
     bd=10,
     font=("Verdana", 16),
-    bg="black",
-    fg="yellow",
+    bg="#FFFFFF",
+    fg="#F37A9A",
     height=2,
     width=17,
 )
@@ -311,8 +311,8 @@ r = tk.Button(
     command=view_attendance,
     bd=10,
     font=("Verdana", 16),
-    bg="black",
-    fg="yellow",
+    bg="#FFFFFF",
+    fg="#F37A9A",
     height=2,
     width=17,
 )
@@ -324,8 +324,8 @@ r = tk.Button(
     bd=10,
     command=quit,
     font=("Verdana", 16),
-    bg="black",
-    fg="yellow",
+    bg="#FFFFFF",
+    fg="#F37A9A",
     height=2,
     width=17,
 )
