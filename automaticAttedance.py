@@ -40,8 +40,8 @@ def subjectChoose(text_to_speech):
                     e = "Model not found,please train model"
                     Notifica.configure(
                         text=e,
-                        bg="black",
-                        fg="yellow",
+                        bg="#FFFFFF",
+                        fg="#F37A9A",
                         width=33,
                         font=("times", 15, "bold"),
                     )
@@ -137,8 +137,8 @@ def subjectChoose(text_to_speech):
                 m = "Attendance Filled Successfully of " + Subject
                 Notifica.configure(
                     text=m,
-                    bg="black",
-                    fg="yellow",
+                    bg="#FFFFFF",
+                    fg="#F37A9A",
                     width=33,
                     relief=RIDGE,
                     bd=5,
@@ -156,7 +156,7 @@ def subjectChoose(text_to_speech):
 
                 root = tkinter.Tk()
                 root.title("Attendance of " + Subject)
-                root.configure(background="black")
+                root.configure(background="#ffffff")
                 cs = os.path.join(path, fileName)
                 print(cs)
                 with open(cs, newline="") as file:
@@ -171,9 +171,9 @@ def subjectChoose(text_to_speech):
                                 root,
                                 width=10,
                                 height=1,
-                                fg="yellow",
+                                fg="#F37A9A",
                                 font=("times", 15, " bold "),
-                                bg="black",
+                                bg="#FFFFFF",
                                 text=row,
                                 relief=tkinter.RIDGE,
                             )
@@ -193,27 +193,27 @@ def subjectChoose(text_to_speech):
     subject.title("Subject...")
     subject.geometry("580x320")
     subject.resizable(0, 0)
-    subject.configure(background="black")
+    subject.configure(background="#ffffff")
     # subject_logo = Image.open("UI_Image/0004.png")
     # subject_logo = subject_logo.resize((50, 47), Image.ANTIALIAS)
     # subject_logo1 = ImageTk.PhotoImage(subject_logo)
-    titl = tk.Label(subject, bg="black", relief=RIDGE, bd=10, font=("arial", 30))
+    titl = tk.Label(subject, bg="#ffffff", relief=RIDGE, bd=10, font=("arial", 30))
     titl.pack(fill=X)
     # l1 = tk.Label(subject, image=subject_logo1, bg="black",)
     # l1.place(x=100, y=10)
     titl = tk.Label(
         subject,
         text="Enter the Subject Name",
-        bg="black",
-        fg="green",
+        bg="#FFFFFF",
+        fg="#F37A9A",
         font=("arial", 25),
     )
     titl.place(x=160, y=12)
     Notifica = tk.Label(
         subject,
         text="Attendance filled Successfully",
-        bg="yellow",
-        fg="black",
+        bg="#F37A9A",
+        fg="#FFFFFF",
         width=33,
         height=2,
         font=("times", 15, "bold"),
@@ -235,8 +235,8 @@ def subjectChoose(text_to_speech):
         command=Attf,
         bd=7,
         font=("times new roman", 15),
-        bg="black",
-        fg="yellow",
+        bg="#FFFFFF",
+        fg="#F37A9A",
         height=2,
         width=10,
         relief=RIDGE,
@@ -248,8 +248,8 @@ def subjectChoose(text_to_speech):
         text="Enter Subject",
         width=10,
         height=2,
-        bg="black",
-        fg="yellow",
+        bg="#FFFFFF",
+        fg="#F37A9A",
         bd=5,
         relief=RIDGE,
         font=("times new roman", 15),
@@ -260,8 +260,8 @@ def subjectChoose(text_to_speech):
         subject,
         width=15,
         bd=5,
-        bg="black",
-        fg="yellow",
+        bg="#FFFFFF",
+        fg="#F37A9A",
         relief=RIDGE,
         font=("times", 30, "bold"),
     )
@@ -273,8 +273,8 @@ def subjectChoose(text_to_speech):
         command=FillAttendance,
         bd=7,
         font=("times new roman", 15),
-        bg="black",
-        fg="yellow",
+        bg="#FFFFFF",
+        fg="#F37A9A",
         height=2,
         width=12,
         relief=RIDGE,
