@@ -1,334 +1,152 @@
 import tkinter as tk
-from tkinter import *
-import os, cv2
-import shutil
+from tkinter import messagebox
+import os
+import cv2
 import csv
 import numpy as np
 from PIL import ImageTk, Image
 import pandas as pd
-import datetime
-import time
-import tkinter.font as font
 import pyttsx3
 
-# project module
 import show_attendance
 import takeImage
 import trainImage
 import automaticAttedance
+
+# Set paths
+base_path = "D:\INTERN PROJECT\Attendance-Management-system-using-face-recognition-master"
+haarcasecade_path = os.path.join(base_path, "haarcascade_frontalface_default.xml")
+trainimagelabel_path = os.path.join(base_path, "TrainingImageLabel\Trainner.yml")
+trainimage_path = os.path.join(base_path, "TrainingImage")
+studentdetail_path = os.path.join(base_path, "StudentDetails\studentdetails.csv")
+attendance_path = os.path.join(base_path, "Attendance")
+
+# Ensure required folders exist
+for path in [trainimage_path, attendance_path]:
+    os.makedirs(path, exist_ok=True)
 
 def text_to_speech(user_text):
     engine = pyttsx3.init()
     engine.say(user_text)
     engine.runAndWait()
 
-# Set absolute paths
-base_path = "D:\\INTERN PROJECT\\Attendance-Management-system-using-face-recognition-master"
+# --- Window setup ---
+window = tk.Tk()
+window.title("Face Recognition Attendance System")
+window.state("zoomed")
+window.configure(bg="#F4F6F8")
 
-haarcasecade_path = os.path.join(base_path, "haarcascade_frontalface_default.xml")
-trainimagelabel_path = os.path.join(base_path, "TrainingImageLabel\\Trainner.yml")
-trainimage_path = os.path.join(base_path, "TrainingImage")
-studentdetail_path = os.path.join(base_path, "StudentDetails\\studentdetails.csv")
-attendance_path = os.path.join(base_path, "Attendance")
+# --- Layout Configuration ---
+window.grid_rowconfigure(0, weight=1)
+window.grid_columnconfigure(0, weight=0)
+window.grid_columnconfigure(1, weight=1)
 
-if not os.path.exists(trainimage_path):
-    os.makedirs(trainimage_path)
+# --- Sidebar ---
+sidebar = tk.Frame(window, bg="#2E3B55", width=220)
+sidebar.grid(row=0, column=0, sticky="ns")
 
-window = Tk()
-window.title("Face Recognizer")
-window.geometry("1280x720")
-dialog_title = "QUIT"
-dialog_text = "Are you sure want to close?"
-window.configure(background="#ffffff")  # Dark theme
+# --- Main Frame ---
+main_frame = tk.Frame(window, bg="white")
+main_frame.grid(row=0, column=1, sticky="nsew")
+main_frame.grid_rowconfigure(1, weight=1)
+main_frame.grid_columnconfigure(0, weight=1)
 
-def del_sc1():
-    sc1.destroy()
+# --- Header ---
+logo_path = os.path.join(base_path, "UI_Image", "0004.png")
+if os.path.exists(logo_path):
+    logo = Image.open(logo_path)
+    logo = logo.resize((50, 47), Image.LANCZOS)
+    logo_img = ImageTk.PhotoImage(logo)
+    logo_label = tk.Label(main_frame, image=logo_img, bg="white")
+    logo_label.image = logo_img
+    logo_label.grid(row=0, column=0, sticky="w", padx=20, pady=20)
 
-def err_screen():
-    global sc1
-    sc1 = tk.Tk()
-    sc1.geometry("400x110")
-    sc1.iconbitmap(os.path.join(base_path, "AMS.ico"))
-    sc1.title("Warning!!")
-    sc1.configure(background="#ffffff")
-    sc1.resizable(0, 0)
-    tk.Label(
-        sc1,
-        text="Enrollment & Name required!!!",
-        fg="#F37A9A",
-        bg="#ffffff",
-        font=("Verdana", 16, "bold"),
-    ).pack()
-    tk.Button(
-        sc1,
-        text="OK",
-        command=del_sc1,
-        fg="#F37A9A",
-        bg="#FFFFFF",
-        width=9,
-        height=1,
-        activebackground="red",
-        font=("Verdana", 16, "bold"),
-    ).place(x=110, y=50)
-
-def testVal(inStr, acttyp):
-    if acttyp == "1":  # insert
-        if not inStr.isdigit():
-            return False
-    return True
-
-logo = Image.open(os.path.join(base_path, "UI_Image\\0002.png"))
-logo = logo.resize((50, 47), Image.LANCZOS)
-logo1 = ImageTk.PhotoImage(logo)
-titl = tk.Label(window, bg="#ffffff", relief=RIDGE, bd=10, font=("Verdana", 30, "bold"))
-titl.pack(fill=X)
-l1 = tk.Label(window, image=logo1, bg="#47daff")
-l1.place(x=470, y=10)
-
-titl = tk.Label(
-    window,
-    text="VINAYAKA MISSION",
-    bg="#F37A9A",  # Dark maroon background
-    fg="#F7F4F4",  # Light text color
-    font=("Verdana", 27, "bold")
-)
-titl.place(x=525, y=12)
-
-
-a = tk.Label(
-    window,
+title_label = tk.Label(
+    main_frame,
     text="Welcome to VINAYAKA MISSION",
-    bg="#fffcfc",
-    fg="#F37A9A",
-    bd=10,
-    font=("Verdana", 35, "bold"),
+    font=("Segoe UI", 28, "bold"),
+    bg="white",
+    fg="#2E3B55"
 )
-a.pack()
+title_label.grid(row=0, column=1, sticky="w", padx=10, pady=20)
 
-ri = Image.open(os.path.join(base_path, "UI_Image\\register.png"))
-r = ImageTk.PhotoImage(ri)
-label1 = Label(window, image=r)
-label1.image = r
-label1.place(x=100, y=270)
+# --- Content Frame ---
+content_frame = tk.Frame(main_frame, bg="white")
+content_frame.grid(row=1, column=0, columnspan=2, sticky="nsew", padx=40, pady=20)
 
-ai = Image.open(os.path.join(base_path, "UI_Image\\attendance.png"))
-a = ImageTk.PhotoImage(ai)
-label2 = Label(window, image=a)
-label2.image = a
-label2.place(x=980, y=270)
-
-vi = Image.open(os.path.join(base_path, "UI_Image\\verifyy.png"))
-v = ImageTk.PhotoImage(vi)
-label3 = Label(window, image=v)
-label3.image = v
-label3.place(x=600, y=270)
-
-def TakeImageUI():
-    ImageUI = Tk()
-    ImageUI.title("Take Student Image..")
-    ImageUI.geometry("780x480")
-    ImageUI.configure(background="#ffffff")
-    ImageUI.resizable(0, 0)
-
-    titl = tk.Label(ImageUI, bg="#ffffff", relief=RIDGE, bd=10, font=("Verdana", 30, "bold"))
-    titl.pack(fill=X)
-    titl = tk.Label(
-        ImageUI, text="Register Your Face", bg="#ffffff", fg="green", font=("Verdana", 30, "bold")
-    )
-    titl.place(x=270, y=12)
-
-    a = tk.Label(
-        ImageUI,
-        text="Enter the details",
-        bg="#ffffff",
-        fg="#F37A9A",
-        bd=10,
-        font=("Verdana", 24, "bold"),
-    )
-    a.place(x=280, y=75)
-
-    lbl1 = tk.Label(
-        ImageUI,
-        text="Enrollment No",
-        width=10,
-        height=2,
-        bg="#ffffff",
-        fg="#F37A9A",
-        bd=5,
-        relief=RIDGE,
-        font=("Verdana", 14),
-    )
-    lbl1.place(x=120, y=130)
-    txt1 = tk.Entry(
-        ImageUI,
-        width=17,
-        bd=5,
-        validate="key",
-        bg="#FFFFFF",
-        fg="#F37A9A",
-        relief=RIDGE,
-        font=("Verdana", 18, "bold"),
-    )
-    txt1.place(x=250, y=130)
-    txt1["validatecommand"] = (txt1.register(testVal), "%P", "%d")
-
-    lbl2 = tk.Label(
-        ImageUI,
-        text="Name",
-        width=10,
-        height=2,
-        bg="#ffffff",
-        fg="#F37A9A",
-        bd=5,
-        relief=RIDGE,
-        font=("Verdana", 14),
-    )
-    lbl2.place(x=120, y=200)
-    txt2 = tk.Entry(
-        ImageUI,
-        width=17,
-        bd=5,
-        bg="#FFFFFF",
-        fg="#F37A9A",
-        relief=RIDGE,
-        font=("Verdana", 18, "bold"),
-    )
-    txt2.place(x=250, y=200)
-
-    lbl3 = tk.Label(
-        ImageUI,
-        text="Notification",
-        width=10,
-        height=2,
-        bg="#ffffff",
-        fg="#F37A9A",
-        bd=5,
-        relief=RIDGE,
-        font=("Verdana", 14),
-    )
-    lbl3.place(x=120, y=270)
-
-    message = tk.Label(
-        ImageUI,
-        text="",
-        width=32,
-        height=2,
-        bd=5,
-        bg="#FFFFFF",
-        fg="#F37A9A",
-        relief=RIDGE,
-        font=("Verdana", 14, "bold"),
-    )
-    message.place(x=250, y=270)
+# --- Functions ---
+def load_register_frame():
+    clear_content_frame()
+    highlight_button("Register Student")
 
     def take_image():
         l1 = txt1.get()
         l2 = txt2.get()
-        takeImage.TakeImage(
-            l1,
-            l2,
-            haarcasecade_path,
-            trainimage_path,
-            message,
-            err_screen,
-            text_to_speech,
-        )
+        if l1 == "" or l2 == "":
+            messagebox.showerror("Error", "Enrollment and Name required")
+            return
+        takeImage.TakeImage(l1, l2, haarcasecade_path, trainimage_path, msg_label, messagebox.showerror, text_to_speech)
         txt1.delete(0, "end")
         txt2.delete(0, "end")
 
-    takeImg = tk.Button(
-        ImageUI,
-        text="Take Image",
-        command=take_image,
-        bd=10,
-        font=("Verdana", 18, "bold"),
-        bg="#FFFFFF",
-        fg="#F37A9A",
-        height=2,
-        width=12,
-        relief=RIDGE,
-    )
-    takeImg.place(x=130, y=350)
-
     def train_image():
-        trainImage.TrainImage(
-            haarcasecade_path,
-            trainimage_path,
-            trainimagelabel_path,
-            message,
-            text_to_speech,
-        )
+        trainImage.TrainImage(haarcasecade_path, trainimage_path, trainimagelabel_path, msg_label, text_to_speech)
 
-    trainImg = tk.Button(
-        ImageUI,
-        text="Train Image",
-        command=train_image,
-        bd=10,
-        font=("Verdana", 18, "bold"),
-        bg="#FFFFFF",
-        fg="#F37A9A",
-        height=2,
-        width=12,
-        relief=RIDGE,
-    )
-    trainImg.place(x=360, y=350)
+    tk.Label(content_frame, text="Enrollment No", font=("Segoe UI", 16), bg="white", anchor="w").grid(row=0, column=0, padx=10, pady=10, sticky="w")
+    txt1 = tk.Entry(content_frame, font=("Segoe UI", 16), width=30, bd=2, relief="solid")
+    txt1.grid(row=0, column=1, padx=10, pady=10)
 
-r = tk.Button(
-    window,
-    text="Register a new student",
-    command=TakeImageUI,
-    bd=10,
-    font=("Verdana", 16),
-    bg="#FFFFFF",
-    fg="#F37A9A",
-    height=2,
-    width=17,
-)
-r.place(x=100, y=520)
+    tk.Label(content_frame, text="Name", font=("Segoe UI", 16), bg="white", anchor="w").grid(row=1, column=0, padx=10, pady=10, sticky="w")
+    txt2 = tk.Entry(content_frame, font=("Segoe UI", 16), width=30, bd=2, relief="solid")
+    txt2.grid(row=1, column=1, padx=10, pady=10)
 
-def automatic_attedance():
-    automaticAttedance.subjectChoose(text_to_speech)
+    msg_label = tk.Label(content_frame, text="", font=("Segoe UI", 14), bg="white", fg="green")
+    msg_label.grid(row=2, column=0, columnspan=2, pady=10)
 
-r = tk.Button(
-    window,
-    text="Take Attendance",
-    command=automatic_attedance,
-    bd=10,
-    font=("Verdana", 16),
-    bg="#FFFFFF",
-    fg="#F37A9A",
-    height=2,
-    width=17,
-)
-r.place(x=600, y=520)
+    tk.Button(content_frame, text="Take Image", command=take_image, font=("Segoe UI", 14), bg="#2E3B55", fg="white", width=15).grid(row=3, column=0, pady=20)
+    tk.Button(content_frame, text="Train Image", command=train_image, font=("Segoe UI", 14), bg="#2E3B55", fg="white", width=15).grid(row=3, column=1, pady=20)
 
-def view_attendance():
-    show_attendance.subjectchoose(text_to_speech)
+def load_attendance_frame():
+    clear_content_frame()
+    highlight_button("Take Attendance")
+    automaticAttedance.subjectChoose(text_to_speech, frame=content_frame)
 
-r = tk.Button(
-    window,
-    text="View Attendance",
-    command=view_attendance,
-    bd=10,
-    font=("Verdana", 16),
-    bg="#FFFFFF",
-    fg="#F37A9A",
-    height=2,
-    width=17,
-)
-r.place(x=1000, y=520)
+def load_view_frame():
+    clear_content_frame()
+    highlight_button("View Attendance")
+    show_attendance.subjectchoose(text_to_speech, frame=content_frame)
 
-r = tk.Button(
-    window,
-    text="EXIT",
-    bd=10,
-    command=quit,
-    font=("Verdana", 16),
-    bg="#FFFFFF",
-    fg="#F37A9A",
-    height=2,
-    width=17,
-)
-r.place(x=600, y=660)
+def clear_content_frame():
+    for widget in content_frame.winfo_children():
+        widget.destroy()
 
+# --- Sidebar Buttons ---
+buttons = {}
+active_button = None
+
+def highlight_button(name):
+    global active_button
+    for btn_name, btn in buttons.items():
+        if btn_name == name:
+            btn.configure(bg="#1C2538")
+            active_button = btn_name
+        else:
+            btn.configure(bg="#2E3B55")
+
+btn_style = {"font": ("Segoe UI", 14), "bg": "#2E3B55", "fg": "white", "bd": 0,
+             "activebackground": "#1C2538", "pady": 15, "anchor": "w"}
+
+buttons["Register Student"] = tk.Button(sidebar, text="Register Student", command=load_register_frame, **btn_style)
+buttons["Register Student"].pack(fill="x")
+
+buttons["Take Attendance"] = tk.Button(sidebar, text="Take Attendance", command=load_attendance_frame, **btn_style)
+buttons["Take Attendance"].pack(fill="x")
+
+buttons["View Attendance"] = tk.Button(sidebar, text="View Attendance", command=load_view_frame, **btn_style)
+buttons["View Attendance"].pack(fill="x")
+
+buttons["Exit"] = tk.Button(sidebar, text="Exit", command=window.quit, **btn_style)
+buttons["Exit"].pack(fill="x")
+
+# Start the app
 window.mainloop()
